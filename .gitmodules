@@ -1,0 +1,3 @@
+[submodule "EasyBMP"]
+	path = EasyBMP
+	url = https://github.com/aburgh/EasyBMP.git
