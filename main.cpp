@@ -17,6 +17,11 @@ void show_help(bool exit_after = true){
     cout << "digital trans [源bmp文件路径] ([目标raw文件路径])" << endl << "\t将bmp文件转换为raw文件" << endl << endl;
     cout << "digital split [文件路径] [切分细分数]" << endl << "\t将bmp文件切分成若干份" << endl << endl;
     cout << "digital split [文件路径] [横轴细分数] [纵轴细分数]" << endl << "\t将bmp文件切分成若干份" << endl << endl;
+    cout << "digital scale near [文件路径] [缩放倍数]" << endl << "\t使用邻近法缩放bmp图片" << endl << endl;
+    cout << "digital scale ip [文件路径] [缩放倍数]" << endl << "\t使用双线性插值法缩放bmp图片" << endl << endl;
+    cout << "digital scale pooling [文件路径] [缩小倍数]" << endl << "\t使用平均池化法缩小bmp图片" << endl << endl;
+    cout << "digital histogram [文件路径]" << endl << "\t使用2x2种方法进行交叉直方图均衡" << endl << endl;
+
     if (exit_after){
         exit(1);
     }
@@ -51,7 +56,7 @@ int main(int argc, char* argv[]){
                 write_bmp_2_raw(argv[2], argv[3]);
             }
         }
-        // 将bmp转换为raw
+            // 将bmp转换为raw
         else if ( arg == "split"){
             if (argc < 5){
                 stringstream ss;
@@ -68,6 +73,49 @@ int main(int argc, char* argv[]){
                 ss << argv[4];
                 ss >> split_y;
                 split_image(argv[2], split_x, split_y);
+            }
+        }
+            // 将缩放bmp
+        else if ( arg == "scale"){
+            if (argc < 5){
+                show_help();
+            } else{
+                string method(argv[2]);
+                if (method == "near"){
+                    float scale;
+                    stringstream ss;
+                    ss << argv[4];
+                    ss >> scale;
+                    scale_near(argv[3], scale, scale);
+                }
+                else if(method == "fp"){
+                    float scale;
+                    stringstream ss;
+                    ss << argv[4];
+                    ss >> scale;
+                    scale_interpolation(argv[3], scale, scale);
+                }
+                else if(method == "pooling"){
+                    int scale;
+                    stringstream ss;
+                    ss << argv[4];
+                    ss >> scale;
+                    scale_pooling_avg(argv[3], scale, scale);
+                }else{
+                    show_help();
+                }
+            }
+        }
+            // 将直方图均衡
+        else if ( arg == "histogram"){
+            if (argc < 4){
+                show_help();
+            } else{
+                string file_name(argv[2]);
+                histogram_balance(file_name, BALANCE_TYPE_TYPICAL, BALANCE_STYLE_HSV);
+                histogram_balance(file_name, BALANCE_TYPE_ADVANCE, BALANCE_STYLE_HSV);
+                histogram_balance(file_name, BALANCE_TYPE_TYPICAL, BALANCE_STYLE_RGB);
+                histogram_balance(file_name, BALANCE_TYPE_ADVANCE, BALANCE_STYLE_RGB);
             }
         }
         else{
