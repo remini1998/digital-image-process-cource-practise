@@ -54,6 +54,7 @@ void scale_pooling_avg(BMP &in_bmp, BMP &out_bmp, int width_scale, int height_sc
 void scale_pooling_avg(const string& file, int scale_x, int scale_y);
 
 void histogram_balance(BMP &in_bmp, BMP &out_bmp, int balance_type=BALANCE_STYLE_HSV, int balance_style=BALANCE_TYPE_TYPICAL);
+
 void histogram_balance(const string& file, int balance_type=BALANCE_STYLE_HSV, int balance_style=BALANCE_TYPE_TYPICAL);
 
 

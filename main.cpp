@@ -22,6 +22,8 @@ void show_help(bool exit_after = true){
     cout << "digital scale pooling [文件路径] [缩小倍数]" << endl << "\t使用平均池化法缩小bmp图片" << endl << endl;
     cout << "digital histogram [文件路径]" << endl << "\t使用2x2种方法进行交叉直方图均衡" << endl << endl;
 
+//    histogram_balance("image_color.bmp");
+
     if (exit_after){
         exit(1);
     }
@@ -88,7 +90,7 @@ int main(int argc, char* argv[]){
                     ss >> scale;
                     scale_near(argv[3], scale, scale);
                 }
-                else if(method == "fp"){
+                else if(method == "ip"){
                     float scale;
                     stringstream ss;
                     ss << argv[4];
@@ -108,7 +110,7 @@ int main(int argc, char* argv[]){
         }
             // 将直方图均衡
         else if ( arg == "histogram"){
-            if (argc < 4){
+            if (argc < 3){
                 show_help();
             } else{
                 string file_name(argv[2]);

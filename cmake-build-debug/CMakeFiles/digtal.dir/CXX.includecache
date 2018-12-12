@@ -32,17 +32,13 @@ EasyBMP_VariousBMPutilities.h
 
 /Users/remini/Projects/course/digital-image/EasyBMP/EasyBMP_VariousBMPutilities.h
 
-/Users/remini/Projects/course/digital-image/main.cpp
-iostream
+/Users/remini/Projects/course/digital-image/utils.cpp
+ios
 -
 fstream
 -
 sstream
 -
-string
--
-EasyBMP/EasyBMP.h
-/Users/remini/Projects/course/digital-image/EasyBMP/EasyBMP.h
 utils.h
 /Users/remini/Projects/course/digital-image/utils.h
 

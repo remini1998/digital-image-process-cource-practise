@@ -13,6 +13,10 @@ int min(int a, int b){
     return a < b ? a : b;
 }
 
+double min_d(double a, double b){
+    return a < b ? a : b;
+}
+
 
 BMP_FILE open_bmp(const string &file_name, bool only_read_header) {
 
@@ -556,9 +560,17 @@ void trans_histogram_hsv(BMP &in_bmp, BMP &out_bmp, ImgBalanceInfo<double> &in_i
             double acc = in_info[v];
             double target_v = acc * MAX_IMG_INFO_SIZE;
 
-            out_bmp(x, y).Red = (int) (p.Red * target_v / v);
-            out_bmp(x, y).Green = (int) (p.Green * target_v / v);
-            out_bmp(x, y).Blue = (int) (p.Blue * target_v / v);
+            double r = p.Red * target_v / v;
+            double g = p.Green * target_v / v;
+            double b = p.Blue * target_v / v;
+
+            r = min_d(r, 255.0);
+            g = min_d(g, 255.0);
+            b = min_d(b, 255.0);
+
+            out_bmp(x, y).Red = (unsigned char) (r);
+            out_bmp(x, y).Green = (unsigned char) (g);
+            out_bmp(x, y).Blue = (unsigned char) (b);
             out_bmp(x, y).Alpha = p.Alpha;
 
             switch (balance_type) {
@@ -568,11 +580,11 @@ void trans_histogram_hsv(BMP &in_bmp, BMP &out_bmp, ImgBalanceInfo<double> &in_i
 
                     // 随机补齐拉平直方图并防止溢出
                     if (out_bmp(x, y).Red < 255)
-                        out_bmp(x, y).Red += random_0_1(p.Red * target_v / v - out_bmp(x, y).Red);
+                        out_bmp(x, y).Red += random_0_1(r - out_bmp(x, y).Red);
                     if (out_bmp(x, y).Green < 255)
-                        out_bmp(x, y).Green += random_0_1(p.Green * target_v / v - out_bmp(x, y).Green);
+                        out_bmp(x, y).Green += random_0_1(g - out_bmp(x, y).Green);
                     if (out_bmp(x, y).Blue < 255)
-                        out_bmp(x, y).Blue += random_0_1(p.Blue * target_v / v - out_bmp(x, y).Blue);
+                        out_bmp(x, y).Blue += random_0_1(b - out_bmp(x, y).Blue);
 
                     break;
                 default: {
@@ -604,9 +616,17 @@ void trans_histogram_rgb(BMP &in_bmp, BMP &out_bmp,
             double acc_g = in_info_g[p.Green];
             double acc_b = in_info_b[p.Blue];
 
-            out_bmp(x, y).Red = (int) (MAX_IMG_INFO_SIZE * acc_r);
-            out_bmp(x, y).Green = (int) (MAX_IMG_INFO_SIZE * acc_g);
-            out_bmp(x, y).Blue = (int) (MAX_IMG_INFO_SIZE * acc_b);
+            double r = MAX_IMG_INFO_SIZE * acc_r;
+            double g = MAX_IMG_INFO_SIZE * acc_g;
+            double b = MAX_IMG_INFO_SIZE * acc_b;
+
+            r = min_d(r, 255.0);
+            g = min_d(g, 255.0);
+            b = min_d(b, 255.0);
+
+            out_bmp(x, y).Red = (unsigned char) (r);
+            out_bmp(x, y).Green = (unsigned char) (g);
+            out_bmp(x, y).Blue = (unsigned char) (b);
             out_bmp(x, y).Alpha = p.Alpha;
 
             switch (balance_type) {
@@ -618,11 +638,11 @@ void trans_histogram_rgb(BMP &in_bmp, BMP &out_bmp,
 
                     // 随机补齐拉平直方图并防止溢出
                     if (out_bmp(x, y).Red < 255)
-                        out_bmp(x, y).Red += random_0_1(MAX_IMG_INFO_SIZE * acc_r - out_bmp(x, y).Red);
+                        out_bmp(x, y).Red += random_0_1(r - out_bmp(x, y).Red);
                     if (out_bmp(x, y).Green < 255)
-                        out_bmp(x, y).Green += random_0_1(MAX_IMG_INFO_SIZE * acc_g - out_bmp(x, y).Green);
+                        out_bmp(x, y).Green += random_0_1(g - out_bmp(x, y).Green);
                     if (out_bmp(x, y).Blue < 255)
-                        out_bmp(x, y).Blue += random_0_1(MAX_IMG_INFO_SIZE * acc_b - out_bmp(x, y).Blue);
+                        out_bmp(x, y).Blue += random_0_1(b - out_bmp(x, y).Blue);
 
                     break;
 
